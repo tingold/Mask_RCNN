@@ -93,7 +93,7 @@ class BuildingDataset(utils.Dataset):
         print("Loading mask for image id "+self.image_lookup[image_id])
 
 
-        mask_url = self.PATH+'/osm/osm_'+self.image_lookup[image_id]
+        mask_url = self.PATH+'/osm/osm'+self.image_lookup[image_id]
         # Pack instance masks into an array
         mask = skimage.io.imread("file://"+mask_url, as_grey=True)
 
