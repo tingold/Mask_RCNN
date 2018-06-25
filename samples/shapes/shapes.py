@@ -100,14 +100,6 @@ class ShapesDataset(utils.Dataset):
             image = self.draw_shape(image, shape, dims, color)
         return image
 
-    def image_reference(self, image_id):
-        """Return the shapes data of the image."""
-        info = self.image_info[image_id]
-        if info["source"] == "shapes":
-            return info["shapes"]
-        else:
-            super(self.__class__).image_reference(self, image_id)
-
     def load_mask(self, image_id):
         """Generate instance masks for shapes of the given image ID.
         """
@@ -128,64 +120,4 @@ class ShapesDataset(utils.Dataset):
         class_ids = np.array([self.class_names.index(s[0]) for s in shapes])
         return mask, class_ids.astype(np.int32)
 
-    def draw_shape(self, image, shape, dims, color):
-        """Draws a shape from the given specs."""
-        # Get the center x, y and the size s
-        x, y, s = dims
-        if shape == 'square':
-            image = cv2.rectangle(image, (x - s, y - s),
-                                  (x + s, y + s), color, -1)
-        elif shape == "circle":
-            image = cv2.circle(image, (x, y), s, color, -1)
-        elif shape == "triangle":
-            points = np.array([[(x, y - s),
-                                (x - s / math.sin(math.radians(60)), y + s),
-                                (x + s / math.sin(math.radians(60)), y + s),
-                                ]], dtype=np.int32)
-            image = cv2.fillPoly(image, points, color)
-        return image
 
-    def random_shape(self, height, width):
-        """Generates specifications of a random shape that lies within
-        the given height and width boundaries.
-        Returns a tuple of three valus:
-        * The shape name (square, circle, ...)
-        * Shape color: a tuple of 3 values, RGB.
-        * Shape dimensions: A tuple of values that define the shape size
-                            and location. Differs per shape type.
-        """
-        # Shape
-        shape = random.choice(["square", "circle", "triangle"])
-        # Color
-        color = tuple([random.randint(0, 255) for _ in range(3)])
-        # Center x, y
-        buffer = 20
-        y = random.randint(buffer, height - buffer - 1)
-        x = random.randint(buffer, width - buffer - 1)
-        # Size
-        s = random.randint(buffer, height // 4)
-        return shape, color, (x, y, s)
-
-    def random_image(self, height, width):
-        """Creates random specifications of an image with multiple shapes.
-        Returns the background color of the image and a list of shape
-        specifications that can be used to draw the image.
-        """
-        # Pick random background color
-        bg_color = np.array([random.randint(0, 255) for _ in range(3)])
-        # Generate a few random shapes and record their
-        # bounding boxes
-        shapes = []
-        boxes = []
-        N = random.randint(1, 4)
-        for _ in range(N):
-            shape, color, dims = self.random_shape(height, width)
-            shapes.append((shape, color, dims))
-            x, y, s = dims
-            boxes.append([y - s, x - s, y + s, x + s])
-        # Apply non-max suppression wit 0.3 threshold to avoid
-        # shapes covering each other
-        keep_ixs = utils.non_max_suppression(
-            np.array(boxes), np.arange(N), 0.3)
-        shapes = [s for i, s in enumerate(shapes) if i in keep_ixs]
-        return bg_color, shapes
