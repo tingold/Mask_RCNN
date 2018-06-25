@@ -82,7 +82,7 @@ class BuildingDataset(utils.Dataset):
             id = img_file.replace("sat","", 1)
 
             abs_img = self.PATH + "/sat/" + img_file
-            self.image_lookup[cnt] = abs_img
+            self.image_lookup.insert(cnt, abs_img)
             self.add_image("buildings", cnt, img_file)
 
 
