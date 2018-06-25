@@ -19,6 +19,7 @@ from mrcnn import model as modellib, utils
 
 # Root directory of the project
 ROOT_DIR = os.path.abspath("../../")
+MODEL_DIR = os.path.join(ROOT_DIR, "logs")
 
 # Import Mask RCNN
 sys.path.append(ROOT_DIR)  # To find local version of the library
@@ -109,4 +110,4 @@ class BuildingDataset(utils.Dataset):
 
 if __name__ == '__main__':
     config = BuildingConfig()
-    model = modellib.MaskRCNN(mode="training", config=config)
+    model = modellib.MaskRCNN(mode="training", config=config,model_dir=MODEL_DIR)
