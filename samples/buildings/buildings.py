@@ -68,26 +68,32 @@ class BuildingDataset(utils.Dataset):
     #PATH = '/Users/tingold/code/Mask_RCNN/samples/buildings/training_data'
     PATH = os.path.join(ROOT_DIR,'samples/buildings/training_data')
 
+    image_lookup = []
+
     def load_buildings(self,):
 
         self.add_class("buildings", 1, "building")
         print("Loading buildings")
 
         image_filenames = os.listdir(self.PATH + '/sat')
+        cnt = 0
         for img_file in image_filenames:
             # id is the tile name without sat in front
             id = img_file.replace("sat","", 1)
 
             abs_img = self.PATH + "/sat/" + img_file
-
-            self.add_image("buildings", id,abs_img)
+            self.image_lookup[cnt] = abs_img
+            self.add_image("buildings", cnt, img_file)
 
 
     def load_mask(self, image_id):
         # Build mask of shape [height, width, instance_count] and list
         # of class IDs that correspond to each channel of the mask.
-        print("Loading mask for image id "+image_id)
-        mask_url = self.PATH+'/osm/osm_'+image_id
+
+        print("Loading mask for image id "+self.image_lookup[image_id])
+
+
+        mask_url = self.PATH+'/osm/osm_'+self.image_lookup[image_id]
         # Pack instance masks into an array
         mask = skimage.io.imread(mask_url, as_grey=True)
         return mask, 1
@@ -100,8 +106,8 @@ class BuildingDataset(utils.Dataset):
         in this case it generates the image on the fly from the
         specs in image_info.
         """
-        print("Loading image for image id " + image_id)
-        img_url = self.PATH + '/sat/sat' + image_id
+        print("Loading image for image id " + self.image_lookup[image_id])
+        img_url = self.PATH + '/sat/sat' + self.image_lookup[image_id]
         # Pack instance masks into an array
         img = skimage.io.imread(img_url, as_grey=False)
         return img
