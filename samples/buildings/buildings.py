@@ -83,7 +83,7 @@ class BuildingDataset(utils.Dataset):
             print(id)
             abs_img = self.PATH + "/sat/" + img_file
             self.image_lookup.insert(cnt, id)
-            self.add_image("buildings", cnt, abs_img)
+            self.add_image("buildings", image_id=cnt, path=abs_img, width=256, height=256)
 
 
     def load_mask(self, image_id):
