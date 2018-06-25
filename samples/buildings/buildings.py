@@ -68,7 +68,7 @@ class BuildingDataset(utils.Dataset):
     def load_buildings(self,):
 
         self.add_class("buildings", 1, "building")
-
+        print("Loading buildings")
 
         image_filenames = os.listdir(self.PATH + '/sat')
         for img_file in image_filenames:
@@ -83,6 +83,7 @@ class BuildingDataset(utils.Dataset):
     def load_mask(self, image_id):
         # Build mask of shape [height, width, instance_count] and list
         # of class IDs that correspond to each channel of the mask.
+        print("Loading mask for image id "+image_id)
         mask_url = self.PATH+'/osm/osm_'+image_id
         # Pack instance masks into an array
         mask = skimage.io.imread(mask_url, as_grey=True)
@@ -96,6 +97,7 @@ class BuildingDataset(utils.Dataset):
         in this case it generates the image on the fly from the
         specs in image_info.
         """
+        print("Loading image for image id " + image_id)
         img_url = self.PATH + '/sat/sat' + image_id
         # Pack instance masks into an array
         img = skimage.io.imread(img_url, as_grey=False)
