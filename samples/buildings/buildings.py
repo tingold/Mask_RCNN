@@ -65,8 +65,7 @@ class BuildingDataset(utils.Dataset):
 
     PATH = '/Users/tingold/code/Mak_RCNN/samples/buildings/training_data'
 
-    def load_buildings(self, dataset_dir, subset, year=DEFAULT_DATASET_YEAR, class_ids=None,
-                  class_map=None, return_coco=False, auto_download=False):
+    def load_buildings(self,):
 
         self.add_class("buildings", 1, "building")
 
