@@ -15,6 +15,7 @@ import math
 import random
 import numpy as np
 import skimage
+from mrcnn import model as modellib, utils
 
 # Root directory of the project
 ROOT_DIR = os.path.abspath("../../")
@@ -59,6 +60,9 @@ class BuildingConfig(Config):
     # use small validation steps since the epoch is small
     VALIDATION_STEPS = 5
 
+    COCO_MODEL_PATH = os.path.join(ROOT_DIR, "mask_rcnn_coco.h5")
+
+    MODEL_DIR = os.path.join(ROOT_DIR, "logs")
 
 
 class BuildingDataset(utils.Dataset):
@@ -103,3 +107,6 @@ class BuildingDataset(utils.Dataset):
         img = skimage.io.imread(img_url, as_grey=False)
         return img
 
+if __name__ == '__main__'
+    config = BuildingConfig()
+    model = modellib.MaskRCNN(mode="training", config=config)
