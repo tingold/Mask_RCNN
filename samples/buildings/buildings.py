@@ -68,7 +68,8 @@ class BuildingConfig(Config):
 
 class BuildingDataset(utils.Dataset):
 
-    PATH = '/Users/tingold/code/Mak_RCNN/samples/buildings/training_data'
+    #PATH = '/Users/tingold/code/Mask_RCNN/samples/buildings/training_data'
+    PATH = '/home/ubuntu/Mask_RCNN/samples/buildings/training_data'
 
     def load_buildings(self,):
 
