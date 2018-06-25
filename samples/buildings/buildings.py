@@ -80,10 +80,10 @@ class BuildingDataset(utils.Dataset):
         for img_file in image_filenames:
             # id is the tile name without sat in front
             id = img_file.replace("sat","", 1)
-
+            print(id)
             abs_img = self.PATH + "/sat/" + img_file
-            self.image_lookup.insert(cnt, abs_img)
-            self.add_image("buildings", cnt, img_file)
+            self.image_lookup.insert(cnt, id)
+            self.add_image("buildings", cnt, abs_img)
 
 
     def load_mask(self, image_id):
