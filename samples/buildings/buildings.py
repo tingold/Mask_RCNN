@@ -18,9 +18,9 @@ import skimage
 from mrcnn import model as modellib, utils
 
 # Root directory of the project
-ROOT_DIR = os.path.abspath("../../")
-MODEL_DIR = "/home/ubuntu/Mask_RCNN/logs"
-
+ROOT_DIR = os.path.abspath("/home/ubuntu/Mask_RCNN/")
+MODEL_DIR = os.path.join(ROOT_DIR,"logs")
+COCO_MODEL_PATH = os.path.join(ROOT_DIR, "mask_rcnn_coco.h5")
 # Import Mask RCNN
 sys.path.append(ROOT_DIR)  # To find local version of the library
 from mrcnn.config import Config
@@ -61,15 +61,12 @@ class BuildingConfig(Config):
     # use small validation steps since the epoch is small
     VALIDATION_STEPS = 5
 
-    COCO_MODEL_PATH = os.path.join(ROOT_DIR, "mask_rcnn_coco.h5")
-
-    MODEL_DIR = os.path.join(ROOT_DIR, "logs")
 
 
 class BuildingDataset(utils.Dataset):
 
     #PATH = '/Users/tingold/code/Mask_RCNN/samples/buildings/training_data'
-    PATH = '/home/ubuntu/Mask_RCNN/samples/buildings/training_data'
+    PATH = os.path.join(ROOT_DIR,'samples/buildings/training_data')
 
     def load_buildings(self,):
 
@@ -111,7 +108,21 @@ class BuildingDataset(utils.Dataset):
 
 if __name__ == '__main__':
     config = BuildingConfig()
-    model = modellib.MaskRCNN(mode="training", config=config,model_dir=MODEL_DIR)
+    model = modellib.MaskRCNN(mode="training", config=config, model_dir=MODEL_DIR)
+    # Training
     dataset_train = BuildingDataset()
     dataset_train.load_buildings()
     dataset_train.prepare()
+    # Validation
+    dataset_val = BuildingDataset()
+    dataset_val.load_shapes()
+    dataset_val.prepare()
+
+    model.load_weights(COCO_MODEL_PATH, by_name=True,
+                       exclude=["mrcnn_class_logits", "mrcnn_bbox_fc",
+                                "mrcnn_bbox", "mrcnn_mask"])
+
+    model.train(dataset_train, dataset_val,
+                learning_rate=config.LEARNING_RATE,
+                epochs=20,
+                layers='heads')
