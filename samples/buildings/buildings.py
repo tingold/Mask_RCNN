@@ -107,6 +107,6 @@ class BuildingDataset(utils.Dataset):
         img = skimage.io.imread(img_url, as_grey=False)
         return img
 
-if __name__ == '__main__'
+if __name__ == '__main__':
     config = BuildingConfig()
     model = modellib.MaskRCNN(mode="training", config=config)
