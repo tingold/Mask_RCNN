@@ -111,7 +111,9 @@ class BuildingDataset(utils.Dataset):
         img_url = self.PATH + '/sat/sat' + self.image_lookup[image_id]
         # Pack instance masks into an array
         img = skimage.io.imread("file://"+img_url, as_gray=False)
-        return img
+        # remove alpha channel
+        return  img[:,:,:3]
+
 
 if __name__ == '__main__':
     config = BuildingConfig()
