@@ -115,7 +115,7 @@ if __name__ == '__main__':
     dataset_train.prepare()
     # Validation
     dataset_val = BuildingDataset()
-    dataset_val.load_shapes()
+    dataset_val.load_buildings()
     dataset_val.prepare()
 
     model.load_weights(COCO_MODEL_PATH, by_name=True,
