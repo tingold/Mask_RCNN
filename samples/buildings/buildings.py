@@ -111,3 +111,6 @@ class BuildingDataset(utils.Dataset):
 if __name__ == '__main__':
     config = BuildingConfig()
     model = modellib.MaskRCNN(mode="training", config=config,model_dir=MODEL_DIR)
+    dataset_train = BuildingDataset()
+    dataset_train.load_shapes()
+    dataset_train.prepare()
