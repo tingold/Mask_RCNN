@@ -80,7 +80,7 @@ class BuildingDataset(utils.Dataset):
 
     def load_buildings(self,):
 
-        self.add_class("buildings", 0, "building")
+        self.add_class("buildings", 1, "building")
         print("Loading buildings")
 
         image_filenames = os.listdir(self.PATH + '/sat')
@@ -93,7 +93,7 @@ class BuildingDataset(utils.Dataset):
             self.image_lookup.insert(cnt, id)
             self.add_image("buildings", image_id=cnt, path=abs_img, width=256, height=256)
 
-
+    # TODO fix this
     def load_mask(self, image_id):
         # Build mask of shape [height, width, instance_count] and list
         # of class IDs that correspond to each channel of the mask.
@@ -103,9 +103,10 @@ class BuildingDataset(utils.Dataset):
 
         mask_url = self.PATH+'/osm/osm'+self.image_lookup[image_id]
         # Pack instance masks into an array
-        mask = skimage.io.imread("file://"+mask_url, as_gray=True)
-        mask = np.zeros([256, 256, 1], dtype=np.uint8)
-
+        mask = skimage.io.imread("file://"+mask_url, as_gray=False)
+        mask1 = np.zeros((256,256,1),dtype=np.uint8)
+        print(mask1.shape)
+        print(mask.shape)
         # sklean.preprocessing.OneHotEncoder
         return mask, 1
 
