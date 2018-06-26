@@ -16,11 +16,17 @@ import random
 import numpy as np
 import skimage
 import sklearn
+import platform
 from mrcnn import model as modellib, utils
 
 # Root directory of the project
-#ROOT_DIR = os.path.abspath("/home/ubuntu/Mask_RCNN/")
-ROOT_DIR = os.path.abspath("/Users/tingold/code/Mask_RCNN/")
+PLATFORM = platform.platform()
+print(PLATFORM)
+ROOT_DIR = os.path.abspath("/home/ubuntu/Mask_RCNN/")
+
+if(PLATFORM.startswith("Darwin")):
+    ROOT_DIR = os.path.abspath("/Users/tingold/code/Mask_RCNN/")
+
 MODEL_DIR = os.path.join(ROOT_DIR,"logs")
 COCO_MODEL_PATH = os.path.join(ROOT_DIR, "mask_rcnn_coco.h5")
 # Import Mask RCNN
@@ -43,7 +49,7 @@ class BuildingConfig(Config):
     IMAGES_PER_GPU = 8
 
     # Number of classes (including background)
-    NUM_CLASSES = 1 + 3  # background + 3 shapes
+    NUM_CLASSES = 1 + 1  # background + 3 shapes
 
     # Use small images for faster training. Set the limits of the small side
     # the large side, and that determines the image shape.
@@ -100,7 +106,7 @@ class BuildingDataset(utils.Dataset):
         mask = skimage.io.imread("file://"+mask_url, as_gray=True)
         mask = np.zeros([256, 256, 1], dtype=np.uint8)
 
-        sklean.preprocessing.OneHotEncoder
+        # sklean.preprocessing.OneHotEncoder
         return mask, 1
 
 
