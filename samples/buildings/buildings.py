@@ -80,7 +80,7 @@ class BuildingDataset(utils.Dataset):
 
     def load_buildings(self,):
 
-        self.add_class("buildings", 1, "building")
+        self.add_class("buildings", 0, "building")
         print("Loading buildings")
 
         image_filenames = os.listdir(self.PATH + '/sat')
