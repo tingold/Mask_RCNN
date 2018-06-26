@@ -15,10 +15,12 @@ import math
 import random
 import numpy as np
 import skimage
+import sklearn
 from mrcnn import model as modellib, utils
 
 # Root directory of the project
-ROOT_DIR = os.path.abspath("/home/ubuntu/Mask_RCNN/")
+#ROOT_DIR = os.path.abspath("/home/ubuntu/Mask_RCNN/")
+ROOT_DIR = os.path.abspath("/Users/tingold/code/Mask_RCNN/")
 MODEL_DIR = os.path.join(ROOT_DIR,"logs")
 COCO_MODEL_PATH = os.path.join(ROOT_DIR, "mask_rcnn_coco.h5")
 # Import Mask RCNN
@@ -96,7 +98,9 @@ class BuildingDataset(utils.Dataset):
         mask_url = self.PATH+'/osm/osm'+self.image_lookup[image_id]
         # Pack instance masks into an array
         mask = skimage.io.imread("file://"+mask_url, as_gray=True)
+        mask = np.zeros([256, 256, 1], dtype=np.uint8)
 
+        sklean.preprocessing.OneHotEncoder
         return mask, 1
 
 
@@ -112,7 +116,7 @@ class BuildingDataset(utils.Dataset):
         # Pack instance masks into an array
         img = skimage.io.imread("file://"+img_url, as_gray=False)
         # remove alpha channel
-        return  img[:,:,:3]
+        return skimage.color.rgba2rgb(img)
 
 
 if __name__ == '__main__':
