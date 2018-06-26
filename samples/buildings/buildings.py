@@ -53,8 +53,8 @@ class BuildingConfig(Config):
 
     # Use small images for faster training. Set the limits of the small side
     # the large side, and that determines the image shape.
-    IMAGE_MIN_DIM = 128
-    IMAGE_MAX_DIM = 128
+    IMAGE_MIN_DIM = 256
+    IMAGE_MAX_DIM = 256
 
     # Use smaller anchors because our image and objects are small
     RPN_ANCHOR_SCALES = (8, 16, 32, 64, 128)  # anchor side in pixels
@@ -121,7 +121,6 @@ class BuildingDataset(utils.Dataset):
         img_url = self.PATH + '/sat/sat' + self.image_lookup[image_id]
         # Pack instance masks into an array
         img = skimage.io.imread("file://"+img_url, as_gray=False)
-        # remove alpha channel
         return img
 
 if __name__ == '__main__':
