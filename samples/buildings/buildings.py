@@ -122,8 +122,7 @@ class BuildingDataset(utils.Dataset):
         # Pack instance masks into an array
         img = skimage.io.imread("file://"+img_url, as_gray=False)
         # remove alpha channel
-        return skimage.color.rgba2rgb(img)
-
+        return img
 
 if __name__ == '__main__':
     config = BuildingConfig()
