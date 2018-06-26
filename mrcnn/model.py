@@ -1224,7 +1224,7 @@ def load_image_gt(dataset, config, image_id, augment=False, augmentation=None,
         min_scale=config.IMAGE_MIN_SCALE,
         max_dim=config.IMAGE_MAX_DIM,
         mode=config.IMAGE_RESIZE_MODE)
-    mask = utils.resize_mask(mask, scale, padding, crop)
+    #mask = utils.resize_mask(mask, scale, padding, crop)
 
     # Random horizontal flips.
     # TODO: will be removed in a future update in favor of augmentation
@@ -1267,9 +1267,13 @@ def load_image_gt(dataset, config, image_id, augment=False, augmentation=None,
 
     # Note that some boxes might be all zeros if the corresponding mask got cropped out.
     # and here is to filter them out
-    _idx = np.sum(mask, axis=(0, 1)) > 0
-    mask = mask[:, :, _idx]
-    class_ids = class_ids[_idx]
+    # _idx = np.sum(mask, axis=(0, 1)) > 0
+
+    # Commented out by tingold and replaced with hardcoded class_id
+    # mask = mask[:, :, _idx]
+    # class_ids = class_ids[_idx]
+
+    class_ids = 1
     # Bounding boxes. Note that some boxes might be all zeros
     # if the corresponding mask got cropped out.
     # bbox: [num_instances, (y1, x1, y2, x2)]
@@ -2349,7 +2353,7 @@ class MaskRCNN():
             validation_steps=self.config.VALIDATION_STEPS,
             max_queue_size=100,
             workers=workers,
-            use_multiprocessing=False,
+            use_multiprocessing=True,
         )
         self.epoch = max(self.epoch, epochs)
 

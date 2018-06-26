@@ -15,6 +15,7 @@ import math
 import random
 import numpy as np
 import skimage
+from PIL import Image
 import sklearn
 import platform
 from mrcnn import model as modellib, utils
@@ -103,12 +104,14 @@ class BuildingDataset(utils.Dataset):
 
         mask_url = self.PATH+'/osm/osm'+self.image_lookup[image_id]
         # Pack instance masks into an array
-        mask = skimage.io.imread("file://"+mask_url, as_gray=False)
-        mask1 = np.zeros((256,256,1),dtype=np.uint8)
-        print(mask1.shape)
-        print(mask.shape)
-        # sklean.preprocessing.OneHotEncoder
-        return mask, 1
+        mask = Image.open(mask_url)
+        red, green, blue, alpha = mask.split()
+        #mask = skimage.io.imread("file://"+mask_url, as_gray=False)
+        data = np.array(red)
+
+        print(data.shape)
+        data = np.reshape(data,(256,256,1))
+        return data, 1
 
 
 
@@ -121,8 +124,8 @@ class BuildingDataset(utils.Dataset):
         print("Loading image for image id " + self.image_lookup[image_id])
         img_url = self.PATH + '/sat/sat' + self.image_lookup[image_id]
         # Pack instance masks into an array
-        img = skimage.io.imread("file://"+img_url, as_gray=False)
-        return img
+        img = Image.open(img_url)
+        return np.array(img)
 
 if __name__ == '__main__':
     config = BuildingConfig()
