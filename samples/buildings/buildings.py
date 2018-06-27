@@ -100,7 +100,7 @@ class BuildingDataset(utils.Dataset):
         # Build mask of shape [height, width, instance_count] and list
         # of class IDs that correspond to each channel of the mask.
 
-        print("Loading mask for image id "+self.image_lookup[image_id])
+        # print("Loading mask for image id "+self.image_lookup[image_id])
 
 
         mask_url = self.PATH+'/osm/osm'+self.image_lookup[image_id]
@@ -127,7 +127,7 @@ class BuildingDataset(utils.Dataset):
         in this case it generates the image on the fly from the
         specs in image_info.
         """
-        print("Loading image for image id " + self.image_lookup[image_id])
+        # print("Loading image for image id " + self.image_lookup[image_id])
         img_url = self.PATH + '/sat/sat' + self.image_lookup[image_id]
         # Pack instance masks into an array
         img = Image.open(img_url)
