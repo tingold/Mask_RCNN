@@ -1224,6 +1224,7 @@ def load_image_gt(dataset, config, image_id, augment=False, augmentation=None,
         min_scale=config.IMAGE_MIN_SCALE,
         max_dim=config.IMAGE_MAX_DIM,
         mode=config.IMAGE_RESIZE_MODE)
+
     #mask = utils.resize_mask(mask, scale, padding, crop)
 
     # Random horizontal flips.
@@ -1267,13 +1268,9 @@ def load_image_gt(dataset, config, image_id, augment=False, augmentation=None,
 
     # Note that some boxes might be all zeros if the corresponding mask got cropped out.
     # and here is to filter them out
-    # _idx = np.sum(mask, axis=(0, 1)) > 0
-
-    # Commented out by tingold and replaced with hardcoded class_id
-    # mask = mask[:, :, _idx]
-    # class_ids = class_ids[_idx]
-
-    class_ids = 1
+    _idx = np.sum(mask, axis=(0, 1)) > 0
+    mask = mask[:, :, _idx]
+    class_ids = class_ids[_idx]
     # Bounding boxes. Note that some boxes might be all zeros
     # if the corresponding mask got cropped out.
     # bbox: [num_instances, (y1, x1, y2, x2)]
@@ -2037,7 +2034,7 @@ class MaskRCNN():
                                      fc_layers_size=config.FPN_CLASSIF_FC_LAYERS_SIZE)
 
             # Detections
-            # output is [batch, num_detections, (y1, x1, y2, x2, class_id, score)] in 
+            # output is [batch, num_detections, (y1, x1, y2, x2, class_id, score)] in
             # normalized coordinates
             detections = DetectionLayer(config, name="mrcnn_detection")(
                 [rpn_rois, mrcnn_class, mrcnn_bbox, input_image_meta])

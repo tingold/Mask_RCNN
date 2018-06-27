@@ -69,6 +69,7 @@ class BuildingConfig(Config):
 
     # use small validation steps since the epoch is small
     VALIDATION_STEPS = 5
+    USE_MINI_MASK = False
 
 
 
@@ -109,9 +110,14 @@ class BuildingDataset(utils.Dataset):
         #mask = skimage.io.imread("file://"+mask_url, as_gray=False)
         data = np.array(red)
 
-        print(data.shape)
-        data = np.reshape(data,(256,256,1))
-        return data, 1
+        # hot = lambda v: 0 if v < 1 else 1
+        #f = np.vectorize(hot)
+        # bin_data = f(data)
+        class_ids = np.array([1])
+        class_ids[0] = 1
+
+        return data, class_ids
+
 
 
 
